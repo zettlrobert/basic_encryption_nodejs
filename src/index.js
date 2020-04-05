@@ -9,10 +9,9 @@ const iv = crypto.randomBytes(16); // initialisierungs vektor (https://de.wikipe
 console.log(`key: ${key}`);
 console.log(`iv: ${iv}`);
 
-const messageBuffer = fs.readFileSync(path.resolve('./message.txt'));
-const message = messageBuffer.toString();
-console.log(`Message: ${message}`)
-
+// const messageBuffer = fs.readFileSync(path.resolve('./message.txt'));
+// const message = messageBuffer.toString();
+// console.log(`Message: ${message}`)
 
 
 let keybuffer = Buffer.from(key);
@@ -22,10 +21,18 @@ const encrypt = (input) => {
   let cipher = crypto.createCipheriv('aes-256-gcm', keybuffer, iv);
   let encrypted = cipher.update(input);
   encrypted = Buffer.concat([encrypted, cipher.final()]);
-  let data = { iv: iv.toString('hex'), encryptedData: encrypted.toString('hex') };
-  fs.writeFileSync('./secret.enc', JSON.stringify(data), 'utf-8')
+  // let data = { iv: iv.toString('hex'), encryptedData: encrypted.toString('hex') };
+  // fs.writeFileSync('./secret.enc', JSON.stringify(data), 'utf -8')
+
+  const messageStream = fs.createWriteStream(path.resolve('./message.txt'))
+  const output = fs.createWriteStream(path.resolve('./output'));
+
+  console.log(messageStream);
+
+
 }
-encrypt(message)
+// encrypt(message)
+encrypt()
 
 
 const decrypt = (input) => {
@@ -41,4 +48,4 @@ const decrypt = (input) => {
 const messageToDecryptBuffer = fs.readFileSync(path.resolve('./secret.enc'));
 const messageToDecrypt = JSON.parse(messageToDecryptBuffer);
 
-decrypt(messageToDecrypt);
+// decrypt(messageToDecrypt);
